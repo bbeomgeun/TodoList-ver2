@@ -1,0 +1,2 @@
+rootProject.name='Todolist-intent'
+include ':app'
