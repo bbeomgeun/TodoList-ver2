@@ -172,18 +172,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 array.add(data.getStringExtra("todo"));
                 array.add(data.getStringExtra("latitude"));
                 array.add(data.getStringExtra("longitude"));
-                array.add(data.getStringExtra("radius"));
+//                array.add(data.getStringExtra("radius"));
                 array.add(data.getStringExtra("place"));
-                array.add(data.getStringExtra("date"));
+//                array.add(data.getStringExtra("date"));
 
 
                 //location 배열에 데이터주기(이게 화면에 나오는 데이터)
                 location.add(data.getStringExtra("todo"));
-                location.add(data.getStringExtra("latitude"));
-                location.add(data.getStringExtra("longitude"));
-                location.add(data.getStringExtra("radius"));
-                location.add(data.getStringExtra("place"));
-                location.add(data.getStringExtra("date"));
+//                location.add(data.getStringExtra("latitude"));
+//                location.add(data.getStringExtra("longitude"));
+//                location.add(data.getStringExtra("radius"));
+//                location.add(data.getStringExtra("place"));
+//                location.add(data.getStringExtra("date"));
                 m_Adapter.notifyDataSetChanged();
                 // adapter에게 말해주기?
             }
@@ -228,7 +228,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
     }
-
     //리시버 등록 해주는 함수
     //리스트만 제대로 갖춰져 있으면 알아서 제값을 찾아 경보를 등록해줌.
     public void receiverMaker(){
@@ -248,8 +247,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //이때 전달되는 파라미터인
 // PendingIntent.FLAG_CANCEL_CURRENT 상수는 새로운 근접 경보가 발생할 때 이전의 펜딩인텐트를 취소하도록 만들어줍니다.
 
-                lm.addProximityAlert(Double.parseDouble(location.get(1+location.size()-6)),Double.parseDouble(array.get(2+location.size()-6))
-                        ,Float.parseFloat(array.get(3+location.size()-6)),5000,proximityIntent);
+                lm.addProximityAlert(Double.parseDouble(array.get(i*4+1)),Double.parseDouble(array.get(i*4+2))
+                        ,10,5000,proximityIntent);
+//                lm.addProximityAlert(Double.parseDouble(location.get(1+location.size()-6)),Double.parseDouble(array.get(2+location.size()-6))
+//                        ,Float.parseFloat(array.get(3+location.size()-6)),5000,proximityIntent);
             }
             //2) 인텐트와 펜딩인텐트를 이용한 목표지점 추가 - 인텐트를 생성하고 목표지점의 위도, 경도와 같은 정보를
 // 추가하면 이를 이용해 브로드캐스팅을 위한 펜딩인텐트로 만들 수 있다.
@@ -304,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
             buffer.close();
         }catch (IOException e){
-            Toast.makeText(getApplicationContext(),"근접 경보를 추가해보아요!!",Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"할 일을 추가해보아요!!",Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
@@ -313,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // 경보를 등록할 때만 사용하면 됨.(메인화면에 나타내줄 필요없음)
 
         for(int i=0;i<array.size();i++){
-            if(i%6 == 0) {
+            if(i%4 == 0) {
                 location.add(array.get(i));
             }
         }

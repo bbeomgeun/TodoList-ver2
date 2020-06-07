@@ -39,7 +39,7 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
     LocationManager lm;
 
     Double Geolat, Geolng, lat, lng;
-    String addressLine;
+    String addressLine,currentLocation;
 
     File file = new File("location.txt");   //파일생성
     FileOutputStream fos;
@@ -58,8 +58,8 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
         todo = findViewById(R.id.todo);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
-        radius = findViewById(R.id.radius);
-        date = findViewById(R.id.date);
+//        radius = findViewById(R.id.radius);
+//        date = findViewById(R.id.date);
         place = findViewById(R.id.poi);
 
         currentLoca = findViewById(R.id.currentLoca);
@@ -113,11 +113,24 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
 
 //        이 버튼을 누르면 직접 입력하지 않아도
 //         하단에 나와있는 현재의 위도와 경도로 자동으로 입력해준다.
-        currentLoca.setOnClickListener(new View.OnClickListener() { //currentLoca버튼에 온클릭리스터 설정
+        currentLoca.setOnClickListener(new View.OnClickListener()
+        { //currentLoca버튼에 온클릭리스터 설정
             @Override
             public void onClick(View view) { //클릭하면
-                latitude.setText(currentLatitude.getText()); // 현재 내 위치가 lat/long textview에 자동입력
-                longitude.setText(currentLongitude.getText());
+//                try {
+                    latitude.setText(currentLatitude.getText());
+                    longitude.setText(currentLongitude.getText());
+
+//                    latitude.setText(currentLatitude.getText()); // 현재 내 위치가 lat/long textview에 자동입력
+//                    longitude.setText(currentLongitude.getText());
+//                    Address Geolocation = coder.getFromLocation(lat,lng,10).get(0);
+//                    currentLocation = Geolocation.getAddressLine(0);
+//                    place.setText(currentLocation);
+//
+//                } catch (IOException e) {
+//                    result.setText("Error: "+ e.getMessage());
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -130,20 +143,20 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
                 // 예외처리 title이랑 변수 (할일)바꾸기 또 date 추가하기
                 // radius는 걍 default 값으로 줄까 생각중
                 if(todo.getText().toString().equals("")
-//                        || latitude.getText().toString().equals("") 위치정보는 안넣어도 가능
-//                        || longitude.getText().toString().equals("")
-                        || radius.getText().toString().equals("")
-                        || date.getText().toString().equals(""))
+                        || latitude.getText().toString().equals("") //위치정보는 안넣어도 가능
+                        || longitude.getText().toString().equals(""))
+//                        || radius.getText().toString().equals("")
+//                        || date.getText().toString().equals(""))
                     rightInput.setVisibility(View.VISIBLE); // 입력 안될시 rightInput이라는 textview 보이게 설정
                 //현재 invisible상태
 
                 else { //main으로 내용들 intent
                     toMainIntent = getIntent();
                     toMainIntent.putExtra("todo",todo.getText().toString());
-                    toMainIntent.putExtra("date",date.getText().toString());
+//                    toMainIntent.putExtra("date",date.getText().toString());
                     toMainIntent.putExtra("latitude",latitude.getText().toString());
                     toMainIntent.putExtra("longitude",longitude.getText().toString());
-                    toMainIntent.putExtra("radius",radius.getText().toString());
+//                    toMainIntent.putExtra("radius",radius.getText().toString());
                     toMainIntent.putExtra("place",place.getText().toString());
                     //6가지 항목 보낸다.
 
@@ -156,14 +169,14 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
                         fos = openFileOutput(file.toString(), Context.MODE_APPEND);
                         fos.write(todo.getText().toString().getBytes());
                         fos.write("\n".getBytes());
-                        fos.write(date.getText().toString().getBytes());
-                        fos.write("\n".getBytes()); // date 추가
+//                        fos.write(date.getText().toString().getBytes());
+//                        fos.write("\n".getBytes()); // date 추가
                         fos.write(latitude.getText().toString().getBytes());
                         fos.write("\n".getBytes());
                         fos.write(longitude.getText().toString().getBytes());
                         fos.write("\n".getBytes());
-                        fos.write(radius.getText().toString().getBytes());
-                        fos.write("\n".getBytes());
+//                        fos.write(radius.getText().toString().getBytes());
+//                        fos.write("\n".getBytes());
                         fos.write(place.getText().toString().getBytes());
                         fos.write("\n".getBytes());
 
