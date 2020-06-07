@@ -16,7 +16,7 @@
             android:textSize="20dp"
             />
         <EditText
-            android:id="@+id/title"
+            android:id="@+id/todo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -139,7 +139,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/currentLoca"
-            android:layout_marginLeft="10dp"
             android:text="현재 위치 설정"
             />
         <Button

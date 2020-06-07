@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Registered Proximity Alarm"
+        android:text="오늘의 할 일을 입력해보세요!"
         android:textSize="20dp"
         android:gravity="center_horizontal"
         />
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="40dp"
-            android:text="Register"
+            android:text="할 일 추가하기"
             />
 
         <Button
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/register"
-            android:text="Release"
+            android:text="할 일 삭제하기"
             />
 
     </RelativeLayout>
