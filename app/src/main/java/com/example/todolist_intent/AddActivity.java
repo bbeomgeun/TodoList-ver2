@@ -1,5 +1,6 @@
 package com.example.todolist_intent;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -17,8 +18,6 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
 
     String TAG = "로그 지점";
 
-    EditText todo, latitude, longitude, radius, date, place;
+    EditText todo, latitude, longitude, place;
     Button currentLoca, addButton;
     TextView currentLatitude, currentLongitude;
     TextView rightInput;
@@ -45,7 +44,6 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
     FileOutputStream fos;
 
     Geocoder coder;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +81,7 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
 
         coder = new Geocoder(this);
         result = findViewById(R.id.result);
+
     }
 
     public void mOnClick(View v) {
@@ -138,7 +137,6 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
         addButton.setOnClickListener(new View.OnClickListener() { // addButton 버튼에 온클릭리스터 설정
             @Override
             public void onClick(View view) {
-
                 // 6가지(할일, 날짜, 위경도, 범위, 위치) 사항 중 하나라도 빈칸일 때,
                 // 예외처리 title이랑 변수 (할일)바꾸기 또 date 추가하기
                 // radius는 걍 default 값으로 줄까 생각중
@@ -151,19 +149,24 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
                 //현재 invisible상태
 
                 else { //main으로 내용들 intent
-                    toMainIntent = getIntent();
-                    toMainIntent.putExtra("todo",todo.getText().toString());
+                    try {
+
+                        toMainIntent = getIntent();
+                        toMainIntent.putExtra("todo", todo.getText().toString());
 //                    toMainIntent.putExtra("date",date.getText().toString());
-                    toMainIntent.putExtra("latitude",latitude.getText().toString());
-                    toMainIntent.putExtra("longitude",longitude.getText().toString());
+                        toMainIntent.putExtra("latitude", latitude.getText().toString());
+                        toMainIntent.putExtra("longitude", longitude.getText().toString());
 //                    toMainIntent.putExtra("radius",radius.getText().toString());
-                    toMainIntent.putExtra("place",place.getText().toString());
-                    //6가지 항목 보낸다.
+                        toMainIntent.putExtra("place", place.getText().toString());
+                        //6가지 항목 보낸다.
 
-                    setResult(RESULT_OK,toMainIntent);
-                    finish(); // main으로 돌아가기(인텐트 종료)
-                    Log.d(TAG, "addButton 완료");
-
+                        setResult(RESULT_OK, toMainIntent);
+                        finish(); // main으로 돌아가기(인텐트 종료)
+                        Log.d(TAG, "addButton 완료");
+                    }catch(Exception e){
+                        Toast.makeText(getApplicationContext(), "오류", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
                     //파일을 열어 입력된 값을 씀.
                     try  {
                         fos = openFileOutput(file.toString(), Context.MODE_APPEND);

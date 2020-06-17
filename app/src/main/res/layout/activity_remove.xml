@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="*삭제할 장소의 이름을 입력하고 버튼을 클릭하면,\n삭제가 완료됩니다.*"
+        android:text="*삭제할 할일의 이름을 입력하고 버튼을 클릭하면,\n삭제가 완료됩니다.*"
         />
 
     <EditText

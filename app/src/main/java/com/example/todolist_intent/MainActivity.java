@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,7 +14,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -66,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     Intent intent;
 
+//    DatabaseManager databaseManager = DatabaseManager.getInstance(this); //DB 데이터를 가져온다.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         ab.setTitle("To-do List");
         setContentView(R.layout.activity_main);
 
-        location = new ArrayList<>(); //정의한 location list 선언
+//        location = new ArrayList<>(); //정의한 location list 선언
         rightInput = findViewById(R.id.rightInput); // rightInput textView (invisible 상태)
         register = findViewById(R.id.register); //register 버튼(add로 넘어감)
         release = findViewById(R.id.rel); //release 버튼(remove로 넘어감)
@@ -93,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         //이전의 경보에 대한 정보를 불러오는 함수
         readAlertFile();
+
+        //실질적으로 리시버 등록을 해주는 함수
+        receiverMaker();
+
     }
 
     @Override
@@ -108,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //실질적으로 리시버 등록을 해주는 함수
         receiverMaker();
     }
+
 
     //런타임 퍼미션 얻기
     @Override
@@ -158,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     startActivityForResult(releaseIntent, 50);
                     //코드주면서 인텐트 시작.
                 }
-            }
+           }
         });
     }
 
@@ -188,13 +192,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 // adapter에게 말해주기?
             }
         }
-        // release Intent . 삭제받고 난 후 호출
+//         release Intent . 삭제받고 난 후 호출
         if (requestCode == 50) {
             if (resultCode == RESULT_OK) {
-
+//
                 //모든 경보 해제
                 lm.removeProximityAlert(proximityIntent);
-            //removeProximityAlert함수를 통해 위치관리자에 등록되었던 위치경보 정보를 해제
+                //removeProximityAlert함수를 통해 위치관리자에 등록되었던 위치경보 정보를 해제
 
                 //모든 경보에 대한 내용은 일단 다 지움.
                 array.clear();
@@ -231,10 +235,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     //리시버 등록 해주는 함수
     //리스트만 제대로 갖춰져 있으면 알아서 제값을 찾아 경보를 등록해줌.
     public void receiverMaker(){
+
         //리시버 등록 코드
         receiver = new AlertReceiver();
         IntentFilter filter = new IntentFilter("beomGeun");
         registerReceiver(receiver,filter);
+
 // 인텐트의 액션 정보 정의 - 목표지점을 등록할 때 사용하는 인텐트를 브로드캐스트 수신자에서
 // 받아 처리할 수 있어야 하므로 전송될 인텐트와 수신을 위한 인텐트 필터에 동일한 액션 정보(키값)-beomgeun 를 정의함
         intent = new Intent("beomGeun");
@@ -248,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 // PendingIntent.FLAG_CANCEL_CURRENT 상수는 새로운 근접 경보가 발생할 때 이전의 펜딩인텐트를 취소하도록 만들어줍니다.
 
                 lm.addProximityAlert(Double.parseDouble(array.get(i*4+1)),Double.parseDouble(array.get(i*4+2))
-                        ,10,5000,proximityIntent);
+                        ,100,1000,proximityIntent);
 //                lm.addProximityAlert(Double.parseDouble(location.get(1+location.size()-6)),Double.parseDouble(array.get(2+location.size()-6))
 //                        ,Float.parseFloat(array.get(3+location.size()-6)),5000,proximityIntent);
             }
@@ -288,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 e.printStackTrace();
             }
         }
-
     }
 
     //앱이 실행될 때 파일을 읽어와서 ArrayList 에 정보를 담는다.
@@ -333,6 +338,4 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public void onProviderDisabled(String provider) {
     }
-
-
-}
+    }
