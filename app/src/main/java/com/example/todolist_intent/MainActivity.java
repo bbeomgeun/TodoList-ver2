@@ -1,8 +1,10 @@
 package com.example.todolist_intent;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.app.PendingIntent;
@@ -10,9 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +27,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,8 +36,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity{
+
 
     final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
@@ -63,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     // 하나의 object로 보여지는 view와 그 view에 올릴 data를 연결하는 bridge
 
     Intent intent;
-
-//    DatabaseManager databaseManager = DatabaseManager.getInstance(this); //DB 데이터를 가져온다.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //텍스트뷰를 3개를 만들면 삭제할 때나 추가할 때 불편해서 리스트뷰로 구현하는 방법을 택함.
         m_ListView = (ListView) findViewById(R.id.list); // main창에 있는 list 설정
 
-        lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         //locationManager 설정(location service)
 
         //런타임 퍼미션 체크
@@ -111,9 +118,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //실질적으로 리시버 등록을 해주는 함수
         receiverMaker();
     }
-
-
-    //런타임 퍼미션 얻기
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -132,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     //버튼의 클릭에 대한 이벤트 처리 함수
-    public void button(){
+    public void button() {
         register.setOnClickListener(new View.OnClickListener() { // 할일 추가하기 버튼 리스터 등록
             @Override
             public void onClick(View view) {
@@ -148,11 +152,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             public void onClick(View view) {
                 //해제 버튼을 누를 때
                 //해제 버튼을 눌렀는데 아무것도 등록된 경보가 없을 시 예외처리해줌
-                if(location.size() == 0){ // location에 아무것도 없을때(할일이 아무것도 없을때)
+                if (location.size() == 0) { // location에 아무것도 없을때(할일이 아무것도 없을때)
                     rightInput.setVisibility(View.VISIBLE); // rightInput textview 나오게하기
                     //삭제할 일이 없습니다.
-                }
-                else {
+                } else {
                     releaseIntent = new Intent(getApplicationContext(), RemoveActivity.class);
                     //삭제할 게 있으면 RemoveActivity로 인텐트
                     releaseIntent.putExtra("locationInformationArray", array);
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     startActivityForResult(releaseIntent, 50);
                     //코드주면서 인텐트 시작.
                 }
-           }
+            }
         });
     }
 
@@ -173,14 +176,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             //registerIntent . 추가받고 난 후 호출
             if (resultCode == RESULT_OK) {
                 //array배열에 데이터들 주기
+//                double lat = Double.parseDouble(data.getStringExtra("latitude"));
+//                double lon = Double.parseDouble(data.getStringExtra("longitude"));
                 array.add(data.getStringExtra("todo"));
                 array.add(data.getStringExtra("latitude"));
                 array.add(data.getStringExtra("longitude"));
 //                array.add(data.getStringExtra("radius"));
                 array.add(data.getStringExtra("place"));
 //                array.add(data.getStringExtra("date"));
-
-
+//                onAddMarker(lat,lon);
                 //location 배열에 데이터주기(이게 화면에 나오는 데이터)
                 location.add(data.getStringExtra("todo"));
 //                location.add(data.getStringExtra("latitude"));
@@ -232,32 +236,33 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         }
     }
+
     //리시버 등록 해주는 함수
     //리스트만 제대로 갖춰져 있으면 알아서 제값을 찾아 경보를 등록해줌.
-    public void receiverMaker(){
+    public void receiverMaker() {
 
         //리시버 등록 코드
         receiver = new AlertReceiver();
         IntentFilter filter = new IntentFilter("beomGeun");
-        registerReceiver(receiver,filter);
+        registerReceiver(receiver, filter);
 
 // 인텐트의 액션 정보 정의 - 목표지점을 등록할 때 사용하는 인텐트를 브로드캐스트 수신자에서
 // 받아 처리할 수 있어야 하므로 전송될 인텐트와 수신을 위한 인텐트 필터에 동일한 액션 정보(키값)-beomgeun 를 정의함
         intent = new Intent("beomGeun");
         try {
-            for(int i=0;i<location.size();i++){
-                intent.putExtra("location",location.get(i)); //location list 내용들 차례차례 인텐트해준다.
+            for (int i = 0; i < location.size(); i++) {
+                intent.putExtra("location", location.get(i)); //location list 내용들 차례차례 인텐트해준다.
                 proximityIntent = PendingIntent.getBroadcast(getApplicationContext(),
                         //getBroadcast룰 통해 팬딩인텐트객체참조
-                        0, intent,PendingIntent.FLAG_UPDATE_CURRENT);
+                        0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 //이때 전달되는 파라미터인
 // PendingIntent.FLAG_CANCEL_CURRENT 상수는 새로운 근접 경보가 발생할 때 이전의 펜딩인텐트를 취소하도록 만들어줍니다.
 
-                lm.addProximityAlert(Double.parseDouble(array.get(i*4+1)),Double.parseDouble(array.get(i*4+2))
-                        ,100,1000,proximityIntent);
+                lm.addProximityAlert(Double.parseDouble(array.get(i * 4 + 1)), Double.parseDouble(array.get(i * 4 + 2))
+                        , 100, 10000, proximityIntent);
 //                lm.addProximityAlert(Double.parseDouble(location.get(1+location.size()-6)),Double.parseDouble(array.get(2+location.size()-6))
 //                        ,Float.parseFloat(array.get(3+location.size()-6)),5000,proximityIntent);
-            }
+                }
             //2) 인텐트와 펜딩인텐트를 이용한 목표지점 추가 - 인텐트를 생성하고 목표지점의 위도, 경도와 같은 정보를
 // 추가하면 이를 이용해 브로드캐스팅을 위한 펜딩인텐트로 만들 수 있다.
 // addProximityAlert()메소드를 이용해 목표지점을 추가할 때 좌표값과 펜딩 인텐트를 파라미터로전달
@@ -268,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     //앱이 실행될 때 런타임 퍼미션 체크하는 함수
-    public void myPermissionCheck(){
+    public void myPermissionCheck() {
         //퍼미션 코드는 교수님의 자료를 퍼와서 수정함.
         //런타임 퍼미션 체크
         if (ContextCompat.checkSelfPermission(MainActivity.this,
@@ -288,29 +293,29 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         } else {
             //허용되었을 때
-            try{
-                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0,this);
-            }catch (SecurityException e){
+            try {
+                lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, locationListener);
+            } catch (SecurityException e) {
                 e.printStackTrace();
             }
         }
     }
 
     //앱이 실행될 때 파일을 읽어와서 ArrayList 에 정보를 담는다.
-    public void readAlertFile(){
-        try{
+    public void readAlertFile() {
+        try {
             FileInputStream fis = openFileInput("location.txt");
             BufferedReader buffer = new BufferedReader(new InputStreamReader(fis));
             String str = buffer.readLine();
 
             while (str != null) {
                 array.add(str);
-                Log.d("리드 : ",str);
+                Log.d("리드 : ", str);
                 str = buffer.readLine();
             }
             buffer.close();
-        }catch (IOException e){
-            Toast.makeText(getApplicationContext(),"할 일을 추가해보아요!!",Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            Toast.makeText(getApplicationContext(), "할 일을 추가해보아요!!", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 
@@ -318,24 +323,29 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         //장소의 위도, 경도, 반경 등에 대한 정보는 array 라는 리스트에 담아
         // 경보를 등록할 때만 사용하면 됨.(메인화면에 나타내줄 필요없음)
 
-        for(int i=0;i<array.size();i++){
-            if(i%4 == 0) {
+        for (int i = 0; i < array.size(); i++) {
+            if (i % 4 == 0) {
                 location.add(array.get(i));
             }
         }
     }
 
-    public void onLocationChanged(Location location) {
-        lat = location.getLatitude();
-        lng = location.getLongitude();
-    }
+    LocationListener locationListener = new LocationListener() {
+        @Override
 
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
 
-    public void onProviderEnabled(String provider) {
-    }
+        public void onLocationChanged(Location location) {
+            lat = location.getLatitude();
+            lng = location.getLongitude();
+        }
 
-    public void onProviderDisabled(String provider) {
-    }
-    }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
+
+        public void onProviderEnabled(String provider) {
+        }
+
+        public void onProviderDisabled(String provider) {
+        }
+    };
+}

@@ -141,10 +141,10 @@ public class AddActivity extends AppCompatActivity implements LocationListener {
                 // 예외처리 title이랑 변수 (할일)바꾸기 또 date 추가하기
                 // radius는 걍 default 값으로 줄까 생각중
                 if(todo.getText().toString().equals("")
-                        || latitude.getText().toString().equals("") //위치정보는 안넣어도 가능
-                        || longitude.getText().toString().equals(""))
-//                        || radius.getText().toString().equals("")
-//                        || date.getText().toString().equals(""))
+                        || latitude.getText().toString().equals("")
+                        || longitude.getText().toString().equals("")
+                        || place.getText().toString().equals(""))
+
                     rightInput.setVisibility(View.VISIBLE); // 입력 안될시 rightInput이라는 textview 보이게 설정
                 //현재 invisible상태
 

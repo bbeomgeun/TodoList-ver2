@@ -26,7 +26,7 @@ public class AlertReceiver extends BroadcastReceiver {
 
         }
         else
-            Toast.makeText(context, location+" 지점에서 벗어납니다..", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, " 지점에서 벗어납니다..", Toast.LENGTH_SHORT).show();
 
     }
 }

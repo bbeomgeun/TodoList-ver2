@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_margin="30dp">
+    android:background="#abf0e9">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +29,9 @@
     <LinearLayout
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,7 +50,8 @@
     <LinearLayout
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,7 +70,8 @@
     <LinearLayout
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,8 +92,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="다시 입력해주세요!"
-        android:textColor="@color/colorAccent"
-        android:textSize="10dp"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
         android:visibility="invisible"/>
 
 
@@ -95,22 +102,30 @@
         android:layout_marginTop="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+        android:layout_marginLeft="25dp">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/currentLoca"
             android:text="현재 위치 설정"
+            android:background="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             />
         <Button
             android:id="@+id/addButton"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/currentLoca"
             android:text="할일 알림 추가"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:background="@android:color/white"
+            android:textStyle="bold"
+
             />
 
         <Button
@@ -118,8 +133,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
             android:onClick="mOnClick"
-            android:text="위경도 변환">
+            android:text="위경도 변환"
+            android:background="@android:color/white"
+            android:textStyle="bold"
+            >
 
         </Button>
 
@@ -130,7 +149,8 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="10dp">
         <TextView
             android:layout_marginLeft="10dp"
             android:layout_width="match_parent"
