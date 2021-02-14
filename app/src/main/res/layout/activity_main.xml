@@ -1,72 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical"
-    android:background="#abf0e9">
+    tools:context=".MainActivity">
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigationView"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        ></FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="오늘의 할 일을 추가해보세요!"
-        android:textSize="30dp"
-        android:textColor="#323232"
-        android:gravity="center_horizontal"
-
+        android:background="?android:attr/windowBackground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:id="@+id/list"
-        android:scrollbars="vertical"
-    android:background="#d4f3ef"
-
-        >
-
-    </ListView>
-
-    <RelativeLayout
-        android:layout_marginTop="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-
-        <Button
-            android:id="@+id/register"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="40dp"
-            android:text="할 일 추가하기"
-            android:background="@android:color/white"
-            android:textStyle="bold"
-            />
-
-        <Button
-            android:id="@+id/rel"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/register"
-            android:text="할 일 삭제하기"
-            android:textStyle="bold"
-            android:background="@android:color/white"
-            />
-
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/rightInput"
-        android:text="삭제할 할일이 없습니다!"
-        android:textColor="@android:color/black"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:visibility="invisible"/>
-
-
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

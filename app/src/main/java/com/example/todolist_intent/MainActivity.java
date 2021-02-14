@@ -1,23 +1,20 @@
 package com.example.todolist_intent;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.FragmentManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,8 +24,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,9 +31,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity{
+
+    private FragmentManager fragmentManager = getSupportFragmentManager();
+
+    private fragment_main fragmentMain = new fragment_main();
+    private fragment_menu2 fragmentMenu2 = new fragment_menu2();
+    private fragment_menu3 fragmentMenu3 = new fragment_menu3();
+    private fragment_menu4 fragmentMenu4 = new fragment_menu4();
 
 
     final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -78,7 +79,7 @@ public class MainActivity extends AppCompatActivity{
 
         androidx.appcompat.app.ActionBar ab = getSupportActionBar(); //action bar 설정
         ab.setTitle("To-do List");
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_main);
 
 //        location = new ArrayList<>(); //정의한 location list 선언
         rightInput = findViewById(R.id.rightInput); // rightInput textView (invisible 상태)
